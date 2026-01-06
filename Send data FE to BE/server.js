@@ -21,14 +21,17 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }))
 
 // API defind here...
+// for testing purpose if API is properly!
 app.get("/", (_, res) => {
     res.send("API is working");
 })
 
+// get all users...
 app.get("/users", (req, res) => {
     res.status(200).send(db)
 })
 
+// add user by /add (PORT Request)
 app.post("/add", (req, res) => {
     const data = req.body;
     const obj = {
@@ -59,6 +62,27 @@ app.post("/add", (req, res) => {
     }
 })
 
+// delete user by /del/:uid (DELETE Request)
+app.delete("/del/:uid", (req, res) => {
+    const { uid } = req.params;
+    const isUserExist = db.find((item) => item.id === Number(uid));
+    if (!isUserExist) {
+        return res.status(404).json({
+            status: false,
+            message: "user are not found"
+        })
+    }
+
+    db.splice(isUserExist, 1)
+
+    fs.writeFile("./data/db.json",JSON.stringify(db))
+    return res.status(200).json({
+        status: true,
+        message: "User are deleted!"
+    })
+
+
+})
 
 // app listening
 app.listen(port, () => console.log(`Server running in http://localhost:${port}`))
