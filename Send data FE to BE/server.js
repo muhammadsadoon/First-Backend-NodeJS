@@ -4,11 +4,16 @@ import morgan from "morgan";
 import { config } from "dotenv";
 import fs from "fs/promises";
 import db from "./data/db.json" with {type: "json"};
+import mongoose from "mongoose";
 
 // .env file configration...
 config({
     path: "./.env"
 });
+
+mongoose.connect(process.env.MONGO_DB_URL)
+.then(()=> console.log("Mongodb Connected"))
+.catch((err)=> console.log("Mongodb Err while connecting: ",err));
 
 // define global envoriment Veriable here...
 const app = express();
