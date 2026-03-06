@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 import morgan from 'morgan';
 import route from './routes/routes.routes.js';
 import fs from "node:fs";
-
+// add env configuration file here
 config();
 
 if(!fs.existsSync("./upload")){
